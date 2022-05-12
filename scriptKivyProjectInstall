@@ -1,7 +1,5 @@
 sudo pacman -S python3 python-pip cython jdk8-openjdk android-tools zip gradle unzip xsel xclip
 archlinux-java set java-8-openjdk
-pip install kivy
-pip install pyrosm
 python -m pip install --upgrade pip setuptools virtualenv
 #python -m virtualenv ../kivy_venv
 python -m virtualenv .
@@ -14,6 +12,8 @@ rm -rf buildozer
 source ./bin/activate
 pip install jnius
 pip install Cython
+pip install kivy
+pip install pyrosm
 buildozer init
 #mv ../whatHolidayIsToDay/* .
 #rm -rf ../whatHolidayIsToDay
