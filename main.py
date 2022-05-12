@@ -27,6 +27,10 @@ class MyApp(App):
 		self.hash_img = {"Holiday":"error",
 						"NextHoliday":"error"}
 		self.theme = ""
+		self.userTheme = {"color_background":(0,0,0), 
+						"color_font":(0,0,0), 
+						"color_font_label":(1,1,1), 
+						"color_button":(1,1,1)}
 		self.score = 0
 		#value check file 'save'
 		self.cipher = "abstraction"
@@ -39,12 +43,14 @@ class MyApp(App):
 			self.parser.append(pars.parser())
 			self.parser[j].requestData(i, self.resultGetData)
 			j += 1
-		self.createScreenManager(self.theme)
+		self.createScreenManager()
 		return self.scman
 
+	#function restart
 	def setFuncRestart(self, fres):
 		self.fres = fres
 
+	#restart layout
 	def restart(self, theme):
 		self.theme = theme
 		self.saveLayout()
@@ -53,21 +59,22 @@ class MyApp(App):
 		#self.stop()
 		#return MyApp().run()
 
-	def createScreenManager(self, theme):
+	def createScreenManager(self):
 		self.scman = ScreenManager()
 		self.menu = screens.ScreenMenu(name="Menu")
 		self.holiday = screens.ScreenHoliday(name="Holiday")
 		self.nextHoliday = screens.ScreenHoliday(name="NextHoliday")
 		self.settingsTheme = screens.ScreenSettingsTheme(name="settingsTheme")
 		self.menu.build(self.goHoliday, self.goNextHoliday, 
-						self.goClicker, self.restart, self.goSetTheme, theme)
+						self.goClicker, self.restart, self.goSetTheme, self.userTheme, self.theme)
 		self.holiday.build(self.goMenu, 
 						self.getImagePath("Holiday"),
-						self.textHoliday["Holiday"], theme)
+						self.textHoliday["Holiday"], self.userTheme, self.theme)
 		self.nextHoliday.build(self.goMenu,
 						self.getImagePath("NextHoliday"),
-						self.textHoliday["NextHoliday"], theme)
-		self.settingsTheme.build(self.goMenu, theme)
+						self.textHoliday["NextHoliday"], self.userTheme, self.theme)
+		self.settingsTheme.build(self.goMenuSaveTheme, self.userTheme, self.theme)
+		self.settingsTheme.set_current_theme(self.menu.getCurrentTheme())
 		#add cnv clicker
 		self.cnvClicker = clicker.cnvClicker()
 		self.cnvClicker.setScore(self.score)
@@ -75,7 +82,7 @@ class MyApp(App):
 
 		self.clicker = screens.ScreenClicker(name="Clicker", 
 							on_touch_up=self.getScoreLayout)
-		self.clicker.build(self.goMenu, self.clickerLayout, theme)
+		self.clicker.build(self.goMenu, self.clickerLayout, self.userTheme, self.theme)
 		self.getScoreLayout(0, 0)
 		self.scman.add_widget(self.menu)
 		self.scman.add_widget(self.settingsTheme)
@@ -106,6 +113,11 @@ class MyApp(App):
 	def goMenu(self, instance):
 		self.saveLayout()
 		self.scman.current = "Menu"
+	def goMenuSaveTheme(self, instance):
+		self.userTheme = self.settingsTheme.get_current_theme()
+		self.theme = "user"
+		self.goMenu("goMenuSaveTheme->.")
+		self.fres()
 
 	def getImagePath(self, name):
 		#if image correct
@@ -120,17 +132,22 @@ class MyApp(App):
 			#loaded and correct
 			if (saveResult[-1] == self.cipher):
 				self.score = saveResult[2]
-				self.theme = saveResult[3]
+				self.theme = saveResult[4]
+				self.userTheme = saveResult[3]
 				#image and text loaded
 				self.textHoliday = saveResult[0].copy()
 				for i in saveResult[1].keys():
 					hash_img = self.svMain.getHash(self.path_img[i])
 					if (saveResult[1][i] == hash_img):
 						self.hash_img[i] = hash_img
+	def setUserThemeLayout(self, instance):
+		self.userTheme = instance.userTheme
+
 	def saveLayout(self):
 		self.svMain.save((self.textHoliday, 
 					self.hash_img,
 					self.score, 
+					self.userTheme,
 					self.theme,
 					self.cipher))
 
