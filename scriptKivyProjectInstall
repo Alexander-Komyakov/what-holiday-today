@@ -3,8 +3,8 @@ archlinux-java set java-8-openjdk
 pip install kivy
 pip install pyrosm
 python -m pip install --upgrade pip setuptools virtualenv
-python -m virtualenv ../kivy_venv
-cd ../kivy_venv
+#python -m virtualenv ../kivy_venv
+python -m virtualenv .
 python -m pip install "kivy[base]" kivy_examples
 git clone https://github.com/kivy/buildozer.git
 cd buildozer
@@ -12,9 +12,11 @@ python setup.py install
 cd ..
 rm -rf buildozer 
 source ./bin/activate
+pip install jnius
+pip install Cython
 buildozer init
-mv ../whatHolidayIsToDay/* .
-rm -rf ../whatHolidayIsToDay
+#mv ../whatHolidayIsToDay/* .
+#rm -rf ../whatHolidayIsToDay
 #touch main.py
 #chmod +x main.py
 
