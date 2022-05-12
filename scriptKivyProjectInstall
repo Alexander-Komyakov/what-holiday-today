@@ -1,32 +1,34 @@
-pacman -S python3 python-pip cython jdk8-openjdk android-tools zip gradle unzip xsel xclip
+sudo pacman -S python3 python-pip cython jdk8-openjdk android-tools zip gradle unzip xsel xclip
 archlinux-java set java-8-openjdk
 pip install kivy
 pip install pyrosm
 python -m pip install --upgrade pip setuptools virtualenv
-python -m virtualenv kivy_venv
-cd kivy_venv
-source ./bin/activate.fish
+python -m virtualenv ../kivy_venv
+cd ../kivy_venv
 python -m pip install "kivy[base]" kivy_examples
 git clone https://github.com/kivy/buildozer.git
 cd buildozer
 python setup.py install
 cd ..
-rm -rf buildozer
+rm -rf buildozer 
+source ./bin/activate
 buildozer init
-touch main.py
-chmod +x main.py
+mv ../whatHolidayIsToDay/* .
+rm -rf ../whatHolidayIsToDay
+#touch main.py
+#chmod +x main.py
 
-echo "import kivy
-from kivy.app import App
-from kivy.uix.button import Label
-
-class mainApp(App):
-	def build(self):
-        return Label(text=\"Hello kivy!\")
-
-
-mApp = mainApp()
-mApp.run()" > main.py
+#echo "import kivy
+#from kivy.app import App
+#from kivy.uix.button import Label
+#
+#class mainApp(App):
+#	def build(self):
+#        return Label(text=\"Hello kivy!\")
+#
+#
+#mApp = mainApp()
+#mApp.run()" > main.py
 
 buildozer appclean
 buildozer android debug
