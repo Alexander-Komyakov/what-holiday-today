@@ -7,3 +7,4 @@ Arch Linux install: </b> <br>
 <b> Building: <br> </b>
   &ensp;buildozer android debug  <br>
 <b> Apk file -> ./bin/*.apk <br> </b>
+<b> Start app -> python main.py <br> </b>
