@@ -22,6 +22,7 @@ class SettingsUI:
 		self.wind = Window
 		self.wind_width = self.wind.width
 		self.wind_height = self.wind.height
+		self.theme = ""
 
 		self.userTheme = {"color_background":(0,0,0), 
 						"color_font":(0,0,0), 
@@ -29,6 +30,7 @@ class SettingsUI:
 						"color_button":(1,1,1)}
 
 	def themeSwitch(self, theme):
+		self.theme = theme
 		if (theme == "white"):
 			self.color_background = (0, 0, 0)
 			self.color_font = (0, 0, 0)
@@ -69,13 +71,9 @@ class ScreenMenu(Screen, SettingsUI):
 		SettingsUI.__init__(self)
 		self.SettingsUI = SettingsUI()
 
-	def themeSwitchLayout(self, instance):
-		self.SettingsUI.themeSwitch(instance.text)
-		self.restart(instance.text)
 
 	def build(self, holiday_press, 
-				next_holiday_press, clicker_press, restart, goSetTheme, userTheme, theme):
-		self.restart = restart
+				next_holiday_press, clicker_press, goSetTheme, userTheme, theme):
 		self.userTheme = userTheme
 		self.themeSwitch(theme)
 
@@ -101,48 +99,6 @@ class ScreenMenu(Screen, SettingsUI):
 								color=self.color_font_label,
 								halign="center",
 								font_size=self.font_size))
-		#theme button
-		self.bxMenu.add_widget(Button(text="custom",
-			font_name=self.font_name,
-			on_press=self.themeSwitchLayout,
-			size_hint=(.1, .1),
-			pos_hint={"right":1},
-			color=self.color_font,
-			background_normal=self.path_img_button,
-			background_down=self.path_img_button,
-			border=(30,30,30,30),
-			background_color=self.color_theme[3]))
-
-		self.bxMenu.add_widget(Button(text="black",
-			font_name=self.font_name,
-			on_press=self.themeSwitchLayout,
-			size_hint=(.1, .1),
-			pos_hint={"right":1},
-			color=self.color_font,
-			background_normal=self.path_img_button,
-			background_down=self.path_img_button,
-			border=(30,30,30,30),
-			background_color=self.color_theme[0]))
-		self.bxMenu.add_widget(Button(text="white",
-			font_name=self.font_name,
-			on_press=self.themeSwitchLayout,
-			size_hint=(.1, .1),
-			pos_hint={"right":1},
-			color=self.color_font,
-			background_normal=self.path_img_button,
-			background_down=self.path_img_button,
-			border=(30,30,30,30),
-			background_color=self.color_theme[1]))
-		self.bxMenu.add_widget(Button(text="blue",
-			font_name=self.font_name,
-			on_press=self.themeSwitchLayout,
-			size_hint=(.1, .1),
-			pos_hint={"right":1},
-			color=self.color_font,
-			background_normal=self.path_img_button,
-			background_down=self.path_img_button,
-			border=(30,30,30,30),
-			background_color=self.color_theme[2]))
 
 		self.bxMenu.add_widget(Button(text=self.nameButtonHoliday,
 			font_name=self.font_name,
@@ -325,12 +281,59 @@ class ScreenSettingsTheme(Screen, SettingsUI):
 		self.cl_pick = ColorPicker()
 		self.cl_pick.bind(on_touch_down=self.switch_theme_layout)
 		self.bxMain.add_widget(self.cl_pick)
+		
+		self.bxSetTheme = BoxLayout(orientation="horizontal",
+							size_hint=(1, .15),
+							padding=[5, 5, 5, 5],
+							spacing=5) 
+		self.bxMain.add_widget(self.bxSetTheme)
+		#theme button
+		self.bxSetTheme.add_widget(Button(text="custom",
+			font_name=self.font_name,
+			font_size=self.font_size,
+			on_press=self.themeSwitchLayout,
+			size_hint=(1, 1),
+			color=self.color_font,
+			background_normal=self.path_img_button,
+			background_down=self.path_img_button,
+			border=(55,55,55,55),
+			background_color=self.color_theme[3]))
+		self.bxSetTheme.add_widget(Button(text="black",
+			font_name=self.font_name,
+			font_size=self.font_size,
+			on_press=self.themeSwitchLayout,
+			size_hint=(1, 1),
+			color=self.color_font,
+			background_normal=self.path_img_button,
+			background_down=self.path_img_button,
+			border=(55,55,55,55),
+			background_color=self.color_theme[0]))
+		self.bxSetTheme.add_widget(Button(text="white",
+			font_name=self.font_name,
+			font_size=self.font_size,
+			on_press=self.themeSwitchLayout,
+			size_hint=(1, 1),
+			color=self.color_font,
+			background_normal=self.path_img_button,
+			background_down=self.path_img_button,
+			border=(55,55,55,55),
+			background_color=self.color_theme[1]))
+		self.bxSetTheme.add_widget(Button(text="blue",
+			font_name=self.font_name,
+			font_size=self.font_size,
+			on_press=self.themeSwitchLayout,
+			size_hint=(1, 1),
+			color=self.color_font,
+			background_normal=self.path_img_button,
+			background_down=self.path_img_button,
+			border=(55,55,55,55),
+			background_color=self.color_theme[2]))
+
 		self.bxSetSwitch = BoxLayout(orientation="horizontal",
 							size_hint=(1, .2),
 							padding=[5, 5, 5, 5],
 							spacing=5) 
 		self.bxMain.add_widget(self.bxSetSwitch)
-
 		self.btn_back = Button(text=self.nameBack,
 									font_name=self.font_name,
 									font_size=self.font_size,
@@ -345,7 +348,7 @@ class ScreenSettingsTheme(Screen, SettingsUI):
 									font_name=self.font_name,
 									font_size=self.font_size,
 									size_hint=(1, 1),
-									on_press=self.set_obj_theme,
+									on_press=self.set_changeable_obj_theme,
 									color=self.color_font,
 									background_normal=self.path_img_button,
 									background_down=self.path_img_button,
@@ -355,7 +358,7 @@ class ScreenSettingsTheme(Screen, SettingsUI):
 									font_name=self.font_name,
 									font_size=self.font_size,
 									size_hint=(1, 1),
-									on_press=self.set_obj_theme,
+									on_press=self.set_changeable_obj_theme,
 									color=self.color_font,
 									background_normal=self.path_img_button,
 									background_down=self.path_img_button,
@@ -365,7 +368,7 @@ class ScreenSettingsTheme(Screen, SettingsUI):
 									font_name=self.font_name,
 									font_size=self.font_size,
 									size_hint=(1, 1),
-									on_press=self.set_obj_theme,
+									on_press=self.set_changeable_obj_theme,
 									color=self.color_font,
 									background_normal=self.path_img_button,
 									background_down=self.path_img_button,
@@ -377,7 +380,7 @@ class ScreenSettingsTheme(Screen, SettingsUI):
 									size_hint=(1, 1),
 									color=self.color_font,
 									background_normal=self.path_img_button,
-									on_press=self.set_obj_theme,
+									on_press=self.set_changeable_obj_theme,
 									background_down=self.path_img_button,
 									border=(55,55,55,55),
 									background_color=self.color_button)
@@ -386,27 +389,33 @@ class ScreenSettingsTheme(Screen, SettingsUI):
 		self.bxSetSwitch.add_widget(self.btn_color_button)
 		self.bxSetSwitch.add_widget(self.btn_color_font2)
 		self.bxSetSwitch.add_widget(self.btn_color_background)
-	
-	def set_current_theme(self, theme):
-		self.userTheme = theme
-	def set_new_theme(self):
-		self.lbl_header.color = self.userTheme["color_font_label"]
-		self.btn_back.background_color = self.userTheme["color_button"]
-		self.btn_back.color = self.userTheme["color_font"]
-		self.btn_size_font.background_color = self.userTheme["color_button"]
-		self.btn_size_font.color = self.userTheme["color_font"]
-		self.btn_color_button.background_color = self.userTheme["color_button"]
-		self.btn_color_button.color = self.userTheme["color_font"]
-		self.btn_color_font2.background_color = self.userTheme["color_button"]
-		self.btn_color_font2.color = self.userTheme["color_font"]
-		self.btn_color_background.background_color = self.userTheme["color_button"]
-		self.btn_color_background.color = self.userTheme["color_font"]
-		Window.clearcolor = self.userTheme["color_background"]
+
+	def themeSwitchLayout(self, instance):
+		self.themeSwitch(instance.text)
+		self.updateThemeThisScreen()
+
+	#update this screen to show new theme
+	#new theme realy update past restart app (goMenu->restart)
+	def updateThemeThisScreen(self):
+		self.lbl_header.color = self.color_font_label
+		self.btn_back.background_color = self.color_button
+		self.btn_back.color = self.color_font
+		self.btn_size_font.background_color = self.color_button
+		self.btn_size_font.color = self.color_font
+		self.btn_color_button.background_color = self.color_button
+		self.btn_color_button.color = self.color_font
+		self.btn_color_font2.background_color = self.color_button
+		self.btn_color_font2.color = self.color_font
+		self.btn_color_background.background_color = self.color_button
+		self.btn_color_background.color = self.color_font
+		Window.clearcolor = self.color_background
+
 	def switch_theme_layout(self, instance, value):
+		self.theme = "user"
+		self.themeSwitch(self.theme)
 		self.userTheme[self.obj_switch] = instance.hex_color
-		self.set_new_theme()
-		#update USERTHEME AND ELEMENT SCREENSETTINGSTHEME
-	def set_obj_theme(self, instance):
+		self.updateThemeThisScreen()
+	def set_changeable_obj_theme(self, instance):
 		if (instance.text == "Цвет фона"):
 			self.obj_switch = "color_background"
 		elif (instance.text == "Цвет шрифта"):
@@ -415,6 +424,3 @@ class ScreenSettingsTheme(Screen, SettingsUI):
 			self.obj_switch = "color_font_label"
 		elif (instance.text == "Цвет кнопок"):
 			self.obj_switch = "color_button"
-	def get_current_theme(self):
-		return self.userTheme
-

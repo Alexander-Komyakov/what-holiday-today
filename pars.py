@@ -6,7 +6,8 @@ if __name__ == "main":
 	exit()
 
 class parser():
-	def requestData(self, nameReq, funcReturnData):
+	#name request, function return data
+	def bind_requestData(self, nameReq, funcReturnData):
 		self.nameReq = nameReq
 		self.timeout = 60
 		self.funcReturnData = funcReturnData

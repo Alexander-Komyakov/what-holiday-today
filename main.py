@@ -41,13 +41,13 @@ class MyApp(App):
 		j = 0
 		for i in self.path_img.keys():
 			self.parser.append(pars.parser())
-			self.parser[j].requestData(i, self.resultGetData)
+			self.parser[j].bind_requestData(i, self.resultGetData)
 			j += 1
 		self.createScreenManager()
 		return self.scman
 
 	#function restart
-	def setFuncRestart(self, fres):
+	def bind_restart(self, fres):
 		self.fres = fres
 
 	#restart layout
@@ -61,20 +61,26 @@ class MyApp(App):
 
 	def createScreenManager(self):
 		self.scman = ScreenManager()
+
 		self.menu = screens.ScreenMenu(name="Menu")
 		self.holiday = screens.ScreenHoliday(name="Holiday")
 		self.nextHoliday = screens.ScreenHoliday(name="NextHoliday")
 		self.settingsTheme = screens.ScreenSettingsTheme(name="settingsTheme")
+
 		self.menu.build(self.goHoliday, self.goNextHoliday, 
-						self.goClicker, self.restart, self.goSetTheme, self.userTheme, self.theme)
+						self.goClicker, self.goSetTheme, 
+						self.userTheme, self.theme)
 		self.holiday.build(self.goMenu, 
 						self.getImagePath("Holiday"),
 						self.textHoliday["Holiday"], self.userTheme, self.theme)
 		self.nextHoliday.build(self.goMenu,
 						self.getImagePath("NextHoliday"),
-						self.textHoliday["NextHoliday"], self.userTheme, self.theme)
-		self.settingsTheme.build(self.goMenuSaveTheme, self.userTheme, self.theme)
-		self.settingsTheme.set_current_theme(self.menu.getCurrentTheme())
+						self.textHoliday["NextHoliday"], 
+						self.userTheme, self.theme)
+		self.settingsTheme.build(self.goMenuSaveTheme,
+								self.userTheme, self.theme)
+		self.settingsTheme.themeSwitch(self.menu.getCurrentTheme())
+		#self.settingsTheme.setUserTheme(self.menu.getCurrentTheme())
 		#add cnv clicker
 		self.cnvClicker = clicker.cnvClicker()
 		self.cnvClicker.setScore(self.score)
@@ -100,12 +106,12 @@ class MyApp(App):
 		name = "NextHoliday"
 		self.scman.current = "NextHoliday"
 		self.parser = pars.parser()
-		self.parser.requestData(name, self.resultGetData)
+		self.parser.bind_requestData(name, self.resultGetData)
 	def goHoliday(self, instance):
 		name = "Holiday"
 		self.scman.current = "Holiday"
 		self.parser = pars.parser()
-		self.parser.requestData(name, self.resultGetData)
+		self.parser.bind_requestData(name, self.resultGetData)
 
 	def goSetTheme(self, instance):
 		self.saveLayout()
@@ -114,8 +120,8 @@ class MyApp(App):
 		self.saveLayout()
 		self.scman.current = "Menu"
 	def goMenuSaveTheme(self, instance):
-		self.userTheme = self.settingsTheme.get_current_theme()
-		self.theme = "user"
+		self.userTheme = self.settingsTheme.getUserTheme()
+		self.theme = self.settingsTheme.theme
 		self.goMenu("goMenuSaveTheme->.")
 		self.fres()
 
@@ -173,5 +179,5 @@ def restart():
 
 if __name__ == "__main__":
 	app = MyApp()
-	app.setFuncRestart(restart)
+	app.bind_restart(restart)
 	app.run()
