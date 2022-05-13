@@ -38,11 +38,9 @@ class MyApp(App):
 		self.loadingSaveFile()
 		self.parser = []
 		#pre loading text and image
-		j = 0
-		for i in self.path_img.keys():
+		for j, i in enumerate(self.path_img.keys()):
 			self.parser.append(pars.parser())
 			self.parser[j].bind_requestData(i, self.resultGetData)
-			j += 1
 		self.createScreenManager()
 		return self.scman
 
@@ -79,16 +77,20 @@ class MyApp(App):
 						self.userTheme, self.theme)
 		self.settingsTheme.build(self.goMenuSaveTheme,
 								self.userTheme, self.theme)
+		#set theme to  Screen-SettingsTheme 
 		self.settingsTheme.themeSwitch(self.menu.getCurrentTheme())
-		#self.settingsTheme.setUserTheme(self.menu.getCurrentTheme())
 		#add cnv clicker
 		self.cnvClicker = clicker.cnvClicker()
+		#set save score cnv clicker
 		self.cnvClicker.setScore(self.score)
+		#get layout cnvClicker
 		self.clickerLayout = self.cnvClicker.getLayout()
 
+		#create Screen-Clicker
 		self.clicker = screens.ScreenClicker(name="Clicker", 
 							on_touch_up=self.getScoreLayout)
 		self.clicker.build(self.goMenu, self.clickerLayout, self.userTheme, self.theme)
+		#set score cnv clicker
 		self.getScoreLayout(0, 0)
 		self.scman.add_widget(self.menu)
 		self.scman.add_widget(self.settingsTheme)
