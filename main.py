@@ -105,16 +105,24 @@ class MyApp(App):
 									font_size="18sp",
 									text_size=(self.wind_size[0]*.7, self.wind_size[1]*.3),))
 		self.img = Image(source="./images/imageTmp.png")
-	#	with self.img.canvas.before:
-	#		Color(0,255,0)
-			#Rectangle(pos=(0,self.wind_size[1]-self.wind_size[1]*.1), 
-#			Rectangle(pos=(0,100), 
-#					size=(self.img.texture_size[0]*.4, self.img.texture_size[1]*.4))
+		self.img = MyImage(source="./images/imageTmp.png")
 		self.body_image.add_widget(self.img)
-		#self.body_image.add_widget(Image(source="./images/imageTmp.png"))
-		print(dir(self.img.texture))
-		print(str(self.img.texture_size))
-		print(str(self.img.texture.uvpos))
+
+class MyImage(Image):
+	def __init__(self, **kwargs):
+		super(MyImage, self).__init__(**kwargs)
+		with self.canvas.before:
+			RoundedRectangle(pos=self.pos, 
+					pos_hint={"top":0})
+#			print(dir(RoundedRectangle))
+#					size=self.texture.size)
+		print("TEXTURE DIR: ", dir(self.texture))
+		print(self.texture.uvsize)
+		print(self.texture.width)
+		print(self.texture.height)
+		print(self.width)
+		print(self.height)
+		print(str(self.texture_size))
 
 
 if __name__ == "__main__":
