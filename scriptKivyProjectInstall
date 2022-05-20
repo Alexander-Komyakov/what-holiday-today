@@ -1,4 +1,4 @@
-sudo pacman -S python3 python-pip cython jdk8-openjdk android-tools zip gradle unzip xsel xclip
+sudo pacman -S python3 python-pip cython jdk8-openjdk android-tools zip gradle unzip xsel xclip gst-plugins-good
 archlinux-java set java-8-openjdk
 python -m pip install --upgrade pip setuptools virtualenv
 #python -m virtualenv ../kivy_venv
