@@ -7,7 +7,8 @@ title =	Space
 package.name = space 
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.test
+#package.domain = org.test
+package.domain = org.release
 
 # (str) Source code where the main.py live
 source.dir = .
@@ -22,14 +23,14 @@ source.include_exts = py,png,jpg,kv,atlas,ttf,wav
 #source.exclude_exts = spec
 
 # (list) List of directory to exclude (let empty to not exclude anything)
-#source.exclude_dirs = tests, bin, venv
+source.exclude_dirs = tests, bin, venv
 
 # (list) List of exclusions using pattern matching
 # Do not prefix with './'
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 0.72
+version = 0.8
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
@@ -38,7 +39,6 @@ version = 0.72
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
 requirements = python3,kivy,plyer,requests,urllib3, chardet, certifi, idna, android
-
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
 # requirements.source.kivy = ../../kivy
