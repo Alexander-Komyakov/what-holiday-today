@@ -27,6 +27,7 @@ class cnvClicker():
 		#main layout
 		self.layout = FloatLayout()
 		self.bananSound = SoundLoader.load("./sound/boule.wav")
+		self.manSound = SoundLoader.load("./sound/damage.wav")
 							
 		#3 button man
 		for i in range(3):
@@ -65,12 +66,14 @@ class cnvClicker():
 			self.score -= 10
 			if self.score < 0:
 				self.score = 0
+			self.manSound.play()
 		elif (instance.background_normal[9:14] == "banan"):
 			self.score += 1
 			self.bananSound.play()
 
 	def getScore(self):
 		return self.score
+
 	def getLayout(self):
 		return self.layout
 
