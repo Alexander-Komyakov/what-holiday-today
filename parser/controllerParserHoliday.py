@@ -18,18 +18,18 @@ class ControllerParserHoliday():
 		self.func = func
 
 	def responseParser(self, result):
-		cap = (("Этот текст заглушка в случае ошибки. Что тут писать", "слудующий день"), (b'ff', b'ff'))
+		cap = ("За нашу историю произошло несчетное количество знаменательных событый. Каждый день праздник.", b'ff')
 		#если ошибка
 		if (result == 1):
 			#если это последний парсер
-			if (self.numberPars >= len(self.parsers)):
+			if (self.numberPars == len(self.parsers)-1):
 				#возвращаем заглушку
-				self.func(cap)
+				self.func(cap[0], cap[1])
 			else:
 				#выбираем следующий парсер
 				self.numberPars += 1
 				#начинаем парсинг
-				self.startPars
+				self.startPars()
 		else:
 			self.func(text=result[0], image=result[1])
 

@@ -1,6 +1,6 @@
 from kivy.network.urlrequest import UrlRequest
-import io
 from kivy.core.image import Image as CoreImage
+import io
 
 if __name__ == "main":
 	exit()

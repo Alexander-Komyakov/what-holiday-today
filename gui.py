@@ -3,6 +3,7 @@ from kivy.uix.label import Label
 from kivy.core.window import Window
 from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.graphics import Rectangle, Color
 from kivy.uix.image import Image
@@ -16,9 +17,9 @@ if __name__ == "__main__":
 
 class MainGui():
 	def __init__(self):
-		#текст праздника
-		self.textHoliday = ""
 
+		self.textHoliday = ""
+		self.textNextHoliday = ""
 		#создаем окно
 		self.wind = Window
 		#self.wind.size = (480, 854)
@@ -39,7 +40,7 @@ class MainGui():
 		self.size_button = (1, .01)
 		#создать весь интерфейс
 		self.__createMainGui()
-		#self.setCurrentSlide(1)
+
 	def getMainApp(self):
 		return self.scman
 
@@ -58,15 +59,17 @@ class MainGui():
 		self.lblTextNextHoliday.text = self.textNextHoliday
 
 	def getImageHoliday(self):
-		return self.img.texture
+		return self.imgHoliday.texture
 
 	def getImageNextHoliday(self):
 		return self.imgNextHoliday.texture
 
 	def setImageHoliday(self, texture):
-		self.img.texture = texture
+		self.imgHoliday.opacity = 1
+		self.imgHoliday.texture = texture
 
 	def setImageNextHoliday(self, texture):
+		self.imgNextHoliday.opacity = 1
 		self.imgNextHoliday.texture = texture
 	
 	def getCurrentSlide(self):
@@ -75,6 +78,13 @@ class MainGui():
 	def setCurrentSlide(self, slideNumber):
 		self.bodyCarousel.index = slideNumber
 	
+	def getThemeColor(self):
+		return self.effectImage.color
+
+	def setThemeColor(self, color):
+		self.effectImage.color = (color[0], color[1], color[2], 0.2)
+	
+	#кнопки переходов по слайдам
 	def bindButtonTort(self, func):
 		self.tortButton.bind(on_press=func)
 
@@ -86,6 +96,22 @@ class MainGui():
 
 	def bindButtonGear(self, func):
 		self.gearButton.bind(on_press=func)
+	
+	#кнопки тем
+	def bindButtonTheme(self, func):
+		self.butTheme.bind(on_press=func)
+		self.butTheme2.bind(on_press=func)
+		self.butTheme3.bind(on_press=func)
+		self.butTheme4.bind(on_press=func)
+		self.butTheme5.bind(on_press=func)
+		self.butTheme6.bind(on_press=func)
+		self.butTheme7.bind(on_press=func)
+		self.butTheme8.bind(on_press=func)
+	
+	#добавляем в карусель виджет кликера
+	def setLayoutClicker(self, layout):
+		self.clicker = layout
+		self.bodyCarousel.add_widget(self.clicker, index=2)
 
 	def __createMainGui(self):
 		self.scman = ScreenManager()
@@ -100,6 +126,12 @@ class MainGui():
 
 		#добавляем меню в контроллер экранов
 		self.scman.add_widget(self.screenBody)
+		self.effectLayout = FloatLayout()
+		self.screenBody.add_widget(self.effectLayout)
+
+		#добавляем полотно для изменения общего цвета
+		self.effectImage = Image(color=(0/255, 0/255, 0/255, 0.2))
+		self.effectLayout.add_widget(self.effectImage)
 
 
 		#тело экрана body
@@ -110,20 +142,19 @@ class MainGui():
 		self.bodyHoliday = BoxLayout(size_hint=self.size_body, orientation="vertical")
 		self.bodyNextHoliday = BoxLayout(size_hint=self.size_body, orientation="vertical")
 		#тело gui - центр
-		#self.themeSwitch = BoxLayout(size_hint=(1,1), orientation="vertical")
-		self.bodyCarousel.add_widget(self.bodyHoliday)
-		self.bodyCarousel.add_widget(self.bodyNextHoliday)
+		self.themeSwitch = BoxLayout(size_hint=(1,1), orientation="vertical")
+		self.bodyCarousel.add_widget(self.bodyHoliday, index = 1)
+		self.bodyCarousel.add_widget(self.bodyNextHoliday, index = 3)
 
 		#добавляем виджеты в карусель
-		#self.bodyCarousel.add_widget(self.themeSwitch)
+		self.bodyCarousel.add_widget(self.themeSwitch, index = 0)
 
-		
 		self.bxBody = BoxLayout(orientation="vertical")
 		self.__createHead()
 		self.__createFooter()
 		self.__createHoliday()
 		self.__createNextHoliday()
-		#self.createThemeSwitch()
+		self.__createThemeSwitch()
 
 	def __createHead(self):
 		#виджеты верха gui
@@ -234,21 +265,21 @@ class MainGui():
 			RoundedRectangle(pos=(self.wind_size[0]*.04,self.wind_size[1]*.01), 
 					size=(self.wind_size[0]-self.wind_size[0]*.08, self.wind_size[1]-self.wind_size[1]*.20))
 		#заглушки для разметки интерфейса
-		self.body_cap = BoxLayout(size_hint=(1,.3), orientation="vertical")
+		self.bodyHoliday_cap = BoxLayout(size_hint=(1,.3), orientation="vertical")
 		#создаем места для текста и изображения
-		self.body_text = BoxLayout(size_hint=(1,.3), orientation="vertical")
-		self.body_image = BoxLayout(size_hint=(1,.6), 
+		self.bodyHoliday_text = BoxLayout(size_hint=(1,.3), orientation="vertical")
+		self.bodyHoliday_image = BoxLayout(size_hint=(1,.6), 
 									orientation="vertical",
 									pos_hint={"top:":0.5, "center_x":0.5},
 									padding=(self.wind_size[0]*.06,0,self.wind_size[0]*.06,0))
 		#заглушки для разметки интерфейса
-		self.body_cap2 = BoxLayout(size_hint=(1,.15), orientation="vertical")
+		self.bodyHoliday_cap2 = BoxLayout(size_hint=(1,.15), orientation="vertical")
 
 		#добавляем все что создали в тело
-		self.bodyHoliday.add_widget(self.body_text)
-		self.bodyHoliday.add_widget(self.body_cap)
-		self.bodyHoliday.add_widget(self.body_image)
-		self.bodyHoliday.add_widget(self.body_cap2)
+		self.bodyHoliday.add_widget(self.bodyHoliday_text)
+		self.bodyHoliday.add_widget(self.bodyHoliday_cap)
+		self.bodyHoliday.add_widget(self.bodyHoliday_image)
+		self.bodyHoliday.add_widget(self.bodyHoliday_cap2)
 		#добавляем виджет с текстом
 		self.lblTextHoliday = Label(text=self.textHoliday,
 									color=(4/255, 4/255, 3/255), 
@@ -256,11 +287,11 @@ class MainGui():
 									valign="top", 
 									font_size="18sp",
 									text_size=(self.wind_size[0]*.9, self.wind_size[1]*.3),)
-		self.body_text.add_widget(self.lblTextHoliday)
+		self.bodyHoliday_text.add_widget(self.lblTextHoliday)
 		#загружаем изображение
-		self.img = Image()
+		self.imgHoliday = Image(opacity=0)
 		#добавляем изображение
-		self.body_image.add_widget(self.img)
+		self.bodyHoliday_image.add_widget(self.imgHoliday)
 
 	def __createNextHoliday(self):
 		#доавляем прозрачный прямоугольник в котором будет содержимое блока
@@ -293,37 +324,70 @@ class MainGui():
 									text_size=(self.wind_size[0]*.9, self.wind_size[1]*.3),)
 		self.bodyNextHoliday_text.add_widget(self.lblTextNextHoliday)
 		#загружаем изображение
-		self.imgNextHoliday = Image()
+		self.imgNextHoliday = Image(opacity=0)
 		#добавляем изображение
 		self.bodyNextHoliday_image.add_widget(self.imgNextHoliday)
 
-
-	"""
-	def createThemeSwitch(self):
+	def __createThemeSwitch(self):
 		with self.themeSwitch.canvas.before:
 			Color(22/255, 23/255, 16/255, .49)
 			RoundedRectangle(pos=(self.wind_size[0]*.04,self.wind_size[1]*.01), 
 					size=(self.wind_size[0]-self.wind_size[0]*.08, self.wind_size[1]-self.wind_size[1]*.20))
-		self.body_cap = BoxLayout(size_hint=(1,.04), orientation="vertical")
-		self.body_cap2 = BoxLayout(size_hint=(1,.04), orientation="vertical")
+		self.bodyTheme_cap = BoxLayout(size_hint=(1,.04), orientation="vertical")
+		self.bodyTheme_cap2 = BoxLayout(size_hint=(1,.04), orientation="vertical")
 		self.scrollTheme = ScrollView()
 		self.bxScrollTheme = BoxLayout(orientation="vertical", 
 										pos_hint={"center_x":0.5},
 										size_hint=(1, 1.8),
-										padding=(30, 6, 30, 6))
+										padding=(self.wind_width/20, 6, self.wind_width/20, 6))
 		self.butTheme = Button(size_hint=self.size_button,
-								text="green",
+								text="Ultra Violet",
 								padding=(10,10),
-								background_color=(0,2,0,.08),
+								background_color=(107/255, 91/255, 149/255, .5),
 								background_down="",
 								background_normal="")
-		self.butTheme2 = Button(size_hint=self.size_button)
-		self.butTheme3 = Button(size_hint=self.size_button)
-		self.butTheme4 = Button(size_hint=self.size_button)
-		self.butTheme5 = Button(size_hint=self.size_button)
-		self.butTheme6 = Button(size_hint=self.size_button)
-		self.butTheme7 = Button(size_hint=self.size_button)
-		self.butTheme8 = Button(size_hint=self.size_button)
+		self.butTheme2 = Button(size_hint=self.size_button,
+								text="Lime Punch",
+								padding=(10,10),
+								background_color=(191/255, 214/255, 65/255, .5),
+								background_down="",
+								background_normal="")
+		self.butTheme3 = Button(size_hint=self.size_button,
+								text="Meadowlark",
+								padding=(10,10),
+								background_color=(236/255, 219/255, 84/255, .5),
+								background_down="",
+								background_normal="")
+		self.butTheme4 = Button(size_hint=self.size_button,
+								text="Pink Lavender",
+								padding=(10,10),
+								background_color=(219/255, 177/255, 205/255, .5),
+								background_down="",
+								background_normal="")
+		self.butTheme5 = Button(size_hint=self.size_button,
+								text="Emperador",
+								padding=(10,10),
+								background_color=(108/255, 79/255, 61/255, .5),
+								background_down="",
+								background_normal="")
+		self.butTheme6 = Button(size_hint=self.size_button,
+								text="Lush Meadow",
+								padding=(10,10),
+								background_color=(0/255, 110/255, 81/255, .5),
+								background_down="",
+								background_normal="")
+		self.butTheme7 = Button(size_hint=self.size_button,
+								text="Lilac Grey",
+								padding=(10,10),
+								background_color=(152/255, 150/255, 164/255, .5),
+								background_down="",
+								background_normal="")
+		self.butTheme8 = Button(size_hint=self.size_button,
+								text="Festa",
+								padding=(10,10),
+								background_color=(221/255, 65/255, 50/255,.5),
+								background_down="",
+								background_normal="")
 
 		self.bxScrollTheme.add_widget(self.butTheme)
 		self.bxScrollTheme.add_widget(BoxLayout(size_hint=(1, 0.001), orientation="vertical"))
@@ -343,7 +407,6 @@ class MainGui():
 
 		self.scrollTheme.add_widget(self.bxScrollTheme)
 
-		self.themeSwitch.add_widget(self.body_cap)
+		self.themeSwitch.add_widget(self.bodyTheme_cap)
 		self.themeSwitch.add_widget(self.scrollTheme)
-		self.themeSwitch.add_widget(self.body_cap2)
-	"""
+		self.themeSwitch.add_widget(self.bodyTheme_cap2)
